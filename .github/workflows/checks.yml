@@ -1,0 +1,47 @@
+name: Checks
+
+on: [push, pull_request]
+
+jobs:
+  linting:
+    name: Linting
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # install dependencies from yarn.lock
+      - name: Install dependencies with yarn
+        run: yarn install --frozen-lockfile
+
+      # Run linting with yarn
+      - run: yarn lint
+
+  static-compat:
+    name: Static Compatability
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # install dependencies from yarn.lock
+      - name: Install dependencies with yarn
+        run: yarn install --frozen-lockfile
+
+      - run: yarn build && yarn export
+        env:
+          WORDPRESS_GRAPHQL_ENDPOINT: ${{ secrets.WORDPRESS_GRAPHQL_ENDPOINT }}

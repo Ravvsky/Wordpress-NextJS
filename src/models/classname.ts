@@ -1,10 +1,7 @@
 class ClassName {
+  base: string[];
   constructor(className) {
-    this.base = className;
-
-    if (!Array.isArray(className)) {
-      this.base = [this.base];
-    }
+    this.base = Array.isArray(className) ? className : [className];
   }
 
   add(className) {

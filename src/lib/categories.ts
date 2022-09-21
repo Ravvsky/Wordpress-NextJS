@@ -53,12 +53,53 @@ export async function getCategoryBySlug(slug) {
 
   if (!categoryData?.data.category) return { category: undefined };
 
-  const category = mapCategoryData(categoryData?.data.category);
+  interface test {
+    title?: string;
+    description?: string;
+    canonical?: string;
+    og?: {
+      author: string;
+      description: string;
+      image: {
+        sourceUrl: string;
+        mediaDetails: {
+          height: number;
+          width: number;
+        };
+      };
+      modifiedTime: string;
+      publishedTime: string;
+      publisher: string;
+      title: string;
+      type: string;
+    };
+    article?: {
+      author: string;
+      modifiedTime: string;
+      publishedTime: string;
+      publisher: string;
+    };
+    robots?: {
+      nofollow: string;
+      noindex: string;
+    };
+    twitter?: {
+      description: string;
+      image: {
+        sourceUrl: string;
+        mediaDetails: {
+          height: number;
+          width: number;
+        };
+      };
+      title: string;
+    };
+  }
+  const category: test = mapCategoryData(categoryData?.data.category);
 
   // If the SEO plugin is enabled, look up the data
   // and apply it to the default settings
-
-  if (process.env.WORDPRESS_PLUGIN_SEO === true) {
+  if (process.env.WORDPRESS_PLUGIN_SEO === 'true') {
     try {
       seoData = await apolloClient.query({
         query: QUERY_CATEGORY_SEO_BY_SLUG,
@@ -125,7 +166,7 @@ export async function getCategoryBySlug(slug) {
  * getCategories
  */
 
-export async function getCategories({ count } = {}) {
+export async function getCategories({ count } = { count: 5 }) {
   const { categories } = await getAllCategories();
   return {
     categories: categories.slice(0, count),

@@ -10,7 +10,7 @@ export const SEARCH_STATE_READY = 'READY';
 export const SEARCH_STATE_ERROR = 'ERROR';
 export const SEARCH_STATE_LOADED = 'LOADED';
 
-export const SearchContext = createContext();
+export const SearchContext = createContext(null);
 
 export const SearchProvider = (props) => {
   const search = useSearchState();
@@ -58,7 +58,7 @@ export function useSearchState() {
   };
 }
 
-export default function useSearch({ defaultQuery = null, maxResults } = {}) {
+export default function useSearch({ defaultQuery = null, maxResults = null } = {}) {
   const search = useContext(SearchContext);
   const { client } = search;
 

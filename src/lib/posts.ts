@@ -22,7 +22,7 @@ import {
  * postPathBySlug
  */
 
-export function postPathBySlug(slug) {
+export function postPathBySlug(slug: any) {
   return `/posts/${slug}`;
 }
 
@@ -30,12 +30,12 @@ export function postPathBySlug(slug) {
  * getPostBySlug
  */
 
-export async function getPostBySlug(slug) {
+export async function getPostBySlug(slug: any) {
   const apolloClient = getApolloClient();
   const apiHost = new URL(process.env.WORDPRESS_GRAPHQL_ENDPOINT).host;
 
-  let postData;
-  let seoData;
+  let postData: { data: { post: any } };
+  let seoData: { data: { post: {} } };
 
   try {
     postData = await apolloClient.query({
@@ -50,13 +50,37 @@ export async function getPostBySlug(slug) {
   }
 
   if (!postData?.data.post) return { post: undefined };
-
-  const post = [postData?.data.post].map(mapPostData)[0];
+  interface postInterface {
+    metaTitle?: string;
+    metaDescription?: string;
+    readingTime?: number;
+    canonical?: string;
+    og?: {
+      author: string;
+      description: string;
+      image: {
+        sourceUrl: string;
+        mediaDetails: {
+          height: number;
+          width: number;
+        };
+      };
+      modifiedTime: string;
+      publishedTime: string;
+      publisher: string;
+      title: string;
+      type: string;
+    };
+    article?: {};
+    robots?: {};
+    twitter?: {};
+  }
+  const post = [postData?.data.post].map(mapPostData)[0] as postInterface;
 
   // If the SEO plugin is enabled, look up the data
   // and apply it to the default settings
 
-  if (process.env.WORDPRESS_PLUGIN_SEO === true) {
+  if (process.env.WORDPRESS_PLUGIN_SEO === 'true') {
     try {
       seoData = await apolloClient.query({
         query: QUERY_POST_SEO_BY_SLUG,
@@ -69,9 +93,39 @@ export async function getPostBySlug(slug) {
       console.log('Is the SEO Plugin installed? If not, disable WORDPRESS_PLUGIN_SEO in next.config.js.');
       throw e;
     }
-
-    const { seo = {} } = seoData?.data?.post || {};
-
+    interface seoInterface {
+      seo?: {
+        canonical: string;
+        title: string;
+        metaDesc: string;
+        readingTime: number;
+        opengraphAuthor: string;
+        opengraphDescription: string;
+        opengraphImage: {
+          sourceUrl: string;
+          mediaDetails: {
+            height: number;
+            width: number;
+          };
+        };
+        opengraphModifiedTime: string;
+        opengraphPublishedTime: string;
+        opengraphPublisher: string;
+        opengraphTitle: string;
+        opengraphType: string;
+        metaRobotsNofollow: string;
+        metaRobotsNoindex: string;
+        twitterDescription: string;
+        twitterImage: {
+          altText: string;
+          sourceUrl: string;
+          mediaDetails: {};
+        };
+        twitterTitle: string;
+      };
+    }
+    const { seo }: seoInterface = seoData?.data?.post || {};
+    console.log(seo);
     post.metaTitle = seo.title;
     post.metaDescription = seo.metaDesc;
     post.readingTime = seo.readingTime;
@@ -130,9 +184,8 @@ const allPostsIncludesTypes = {
   index: QUERY_ALL_POSTS_INDEX,
 };
 
-export async function getAllPosts(options = {}) {
+export async function getAllPosts(options: { queryIncludes?: string } = {}) {
   const { queryIncludes = 'index' } = options;
-
   const apolloClient = getApolloClient();
 
   const data = await apolloClient.query({
@@ -161,7 +214,7 @@ export async function getPostsByAuthorSlug({ slug, ...options }) {
 
   const apolloClient = getApolloClient();
 
-  let postData;
+  let postData: { data: { posts: { edges: { node?: {} }[] } } };
 
   try {
     postData = await apolloClient.query({
@@ -197,7 +250,7 @@ export async function getPostsByCategoryId({ categoryId, ...options }) {
 
   const apolloClient = getApolloClient();
 
-  let postData;
+  let postData: { data: { posts: { edges: { node?: {} }[] } } };
 
   try {
     postData = await apolloClient.query({
@@ -234,7 +287,7 @@ export async function getRecentPosts({ count, ...options }) {
  * sanitizeExcerpt
  */
 
-export function sanitizeExcerpt(excerpt) {
+export function sanitizeExcerpt(excerpt: any) {
   if (typeof excerpt !== 'string') {
     throw new Error(`Failed to sanitize excerpt: invalid type ${typeof excerpt}`);
   }
@@ -263,8 +316,44 @@ export function sanitizeExcerpt(excerpt) {
  */
 
 export function mapPostData(post = {}) {
-  const data = { ...post };
-
+  interface dataInterface {
+    author?: {
+      node: any;
+      avatar: {
+        height: number;
+        url: string;
+        width: number;
+      };
+    };
+    categories?: {
+      edges?: {
+        [x: string]: any;
+        __typename: string;
+        node: {};
+      };
+    };
+    featuredImage?: {
+      node?: {
+        altText: string;
+        caption: string;
+        sourceUrl: string;
+        srcSet: string;
+        sizes: string;
+        id: string;
+      };
+      altText: string;
+      caption: string;
+      sourceUrl: string;
+      srcSet: string;
+      sizes: string;
+      id: string;
+    };
+    postId: number;
+  }
+  const data: dataInterface = {
+    ...post,
+    postId: 0,
+  };
   // Clean up the author object to avoid someone having to look an extra
   // level deeper into the node
 
@@ -306,27 +395,38 @@ export function mapPostData(post = {}) {
  * getRelatedPosts
  */
 
-export async function getRelatedPosts(categories, postId, count = 5) {
+export async function getRelatedPosts(
+  categories: { databaseId: number; id: string; name: string; slug: string }[],
+  postId: number,
+  count: number = 5
+) {
   if (!Array.isArray(categories) || categories.length === 0) return;
+  interface relatedInterface {
+    category?: {
+      databaseId: number;
+      id: string;
+      name: string;
+      slug: string;
+    };
+    posts?: { title: string; slug: string };
+  }
 
-  let related = {
+  let related: relatedInterface = {
     category: categories && categories.shift(),
   };
-
   if (related.category) {
     const { posts } = await getPostsByCategoryId({
       categoryId: related.category.databaseId,
       queryIncludes: 'archive',
     });
-
     const filtered = posts.filter(({ postId: id }) => id !== postId);
     const sorted = sortObjectsByDate(filtered);
 
-    related.posts = sorted.map((post) => ({ title: post.title, slug: post.slug }));
+    related.posts = sorted.map((post: { title: string; slug: string }) => ({ title: post.title, slug: post.slug }));
   }
 
   if (!Array.isArray(related.posts) || related.posts.length === 0) {
-    const relatedPosts = await getRelatedPosts(categories, postId, count);
+    const relatedPosts: {} = await getRelatedPosts(categories, postId, count);
     related = relatedPosts || related;
   }
 
@@ -376,7 +476,7 @@ export async function getPostsPerPage() {
  * getPageCount
  */
 
-export async function getPagesCount(posts, postsPerPage) {
+export async function getPagesCount(posts: string | any[], postsPerPage: number) {
   const _postsPerPage = postsPerPage ?? (await getPostsPerPage());
   return Math.ceil(posts.length / _postsPerPage);
 }

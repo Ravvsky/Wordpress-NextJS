@@ -40,13 +40,39 @@ export async function getPageByUri(uri) {
   }
 
   if (!pageData?.data.page) return { page: undefined };
+  interface pageInterface {
+    metaTitle?: string;
+    metaDescription?: string;
+    readingTime?: number;
+    canonical?: string;
+    description?: string;
+    og?: {
+      author: string;
+      description: string;
+      image: {
+        sourceUrl: string;
+        mediaDetails: {
+          height: number;
+          width: number;
+        };
+      };
+      modifiedTime: string;
+      publishedTime: string;
+      publisher: string;
+      title: string;
+      type: string;
+    };
+    article?: {};
+    robots?: {};
+    twitter?: {};
+  }
 
-  const page = [pageData?.data.page].map(mapPageData)[0];
+  const page = [pageData?.data.page].map(mapPageData)[0] as pageInterface;
 
   // If the SEO plugin is enabled, look up the data
   // and apply it to the default settings
 
-  if (process.env.WORDPRESS_PLUGIN_SEO === true) {
+  if (process.env.WORDPRESS_PLUGIN_SEO === 'true') {
     try {
       seoData = await apolloClient.query({
         query: QUERY_PAGE_SEO_BY_URI,
@@ -59,8 +85,39 @@ export async function getPageByUri(uri) {
       console.log('Is the SEO Plugin installed? If not, disable WORDPRESS_PLUGIN_SEO in next.config.js.');
       throw e;
     }
+    interface seoInterface {
+      seo?: {
+        canonical: string;
+        title: string;
+        metaDesc: string;
+        readingTime: number;
+        opengraphAuthor: string;
+        opengraphDescription: string;
+        opengraphImage: {
+          sourceUrl: string;
+          mediaDetails: {
+            height: number;
+            width: number;
+          };
+        };
+        opengraphModifiedTime: string;
+        opengraphPublishedTime: string;
+        opengraphPublisher: string;
+        opengraphTitle: string;
+        opengraphType: string;
+        metaRobotsNofollow: string;
+        metaRobotsNoindex: string;
+        twitterDescription: string;
+        twitterImage: {
+          altText: string;
+          sourceUrl: string;
+          mediaDetails: {};
+        };
+        twitterTitle: string;
+      };
+    }
 
-    const { seo = {} } = seoData?.data?.page || {};
+    const { seo }: seoInterface = seoData?.data?.page || {};
 
     page.metaTitle = seo.title;
     page.description = seo.metaDesc;
@@ -113,7 +170,7 @@ const allPagesIncludesTypes = {
   index: QUERY_ALL_PAGES_INDEX,
 };
 
-export async function getAllPages(options = {}) {
+export async function getAllPages(options: { queryIncludes?: string } = {}) {
   const { queryIncludes = 'index' } = options;
 
   const apolloClient = getApolloClient();
@@ -149,8 +206,42 @@ export async function getTopLevelPages(options) {
  */
 
 export function mapPageData(page = {}) {
-  const data = { ...page };
+  interface childrenInterface {
+    edges?: any[];
+  }
+  interface dataInterface {
+    featuredImage?: {
+      node?: {
+        altText: string;
+        caption: string;
+        id: string;
+        sizes: string;
+        sourceUrl: string;
+        srcSet: string;
+      };
+      altText: string;
+      caption: string;
+      sourceUrl: string;
+      srcSet: string;
+      sizes: string;
+      id: string;
+    };
+    parent?: {
+      node?: {
+        id: string;
+        slug: string;
+        uri: string;
+        title: string;
+      };
+      id: string;
+      slug: string;
+      uri: string;
+      title: string;
+    };
+    children?: childrenInterface;
+  }
 
+  const data: dataInterface = { ...page };
   if (data.featuredImage) {
     data.featuredImage = data.featuredImage.node;
   }
@@ -160,7 +251,7 @@ export function mapPageData(page = {}) {
   }
 
   if (data.children) {
-    data.children = data.children.edges.map(({ node }) => node);
+    data.children = data.children.edges.map(({ node }) => node) as childrenInterface;
   }
 
   return data;

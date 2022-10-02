@@ -26,7 +26,24 @@ export async function getSiteMetadata() {
   const { generalSettings } = siteData?.data || {};
   let { title, description, language } = generalSettings;
 
-  const settings = {
+  interface settingsInterface {
+    title: string;
+    siteTitle: string;
+    description: string;
+    language?: string;
+    social?: {
+      twitter?: {
+        url?: string;
+      };
+    };
+    webmaster?: {};
+    twitter?: {
+      username: string;
+      cardType: string;
+    };
+  }
+
+  const settings: settingsInterface = {
     title,
     siteTitle: title,
     description,
@@ -47,7 +64,7 @@ export async function getSiteMetadata() {
   // If the SEO plugin is enabled, look up the data
   // and apply it to the default settings
 
-  if (process.env.WORDPRESS_PLUGIN_SEO === true) {
+  if (process.env.WORDPRESS_PLUGIN_SEO === 'true') {
     try {
       seoData = await apolloClient.query({
         query: QUERY_SEO_DATA,
@@ -99,16 +116,69 @@ export async function getSiteMetadata() {
 /**
  * constructHelmetData
  */
+interface optionsInterface {
+  router?: {
+    asPath: string;
+  };
+  homepage?: string;
+}
 
-export function constructPageMetadata(defaultMetadata = {}, pageMetadata = {}, options = {}) {
-  const { router = {}, homepage = '' } = options;
+interface pageMetadataInterface {
+  canonical?: string;
+  og?: {
+    author: string;
+    description: string;
+    image: {
+      sourceUrl: string;
+      mediaDetails: {
+        height: number;
+        width: number;
+      };
+    };
+    modifiedTime: string;
+    publishedTime: string;
+    publisher: string;
+    title: string;
+    type: string;
+  };
+  twitter?: {
+    description: string;
+    image: {
+      sourceUrl: string;
+      mediaDetails: {
+        height: number;
+        width: number;
+      };
+    };
+    title: string;
+  };
+  article?: {
+    author: string;
+    modifiedTime: string;
+    publishedTime: string;
+    publisher: string;
+  };
+}
+interface metadataInterface {
+  canonical: string;
+  og: {
+    url?: string;
+    type?: string;
+  };
+  twitter: {};
+  article?: {};
+}
+export function constructPageMetadata(
+  defaultMetadata: pageMetadataInterface = {},
+  pageMetadata: pageMetadataInterface = {},
+  options: optionsInterface = {}
+) {
+  const { router, homepage } = options;
   const { asPath } = router;
-
   const url = `${homepage}${asPath}`;
   const pathname = new URL(url).pathname;
   const canonical = pageMetadata.canonical || `${homepage}${pathname}`;
-
-  const metadata = {
+  const metadata: metadataInterface = {
     canonical,
     og: {
       url,
@@ -188,13 +258,34 @@ export function constructPageMetadata(defaultMetadata = {}, pageMetadata = {}, o
 /**
  * helmetSettingsFromMetadata
  */
+interface helmetSettingsFromMetadataOptions {
+  link?: [];
+  meta?: [];
+  setTitle?: boolean;
+}
 
-export function helmetSettingsFromMetadata(metadata = {}, options = {}) {
+interface helmetSettingsFromMetadataMetadata {
+  [x: string]: any;
+  description?: string;
+  language?: string;
+  title?: string;
+}
+export function helmetSettingsFromMetadata(
+  metadata: helmetSettingsFromMetadataMetadata = {},
+  options: helmetSettingsFromMetadataOptions = {}
+) {
   const { link = [], meta = [], setTitle = true } = options;
-
   const sanitizedDescription = removeExtraSpaces(metadata.description);
 
-  const settings = {
+  interface settingsInterface {
+    htmlAttributes: {
+      lang: string;
+    };
+    title?: string;
+    link?: { rel?: string; href?: any }[];
+    meta?: { name?: string; property?: string; content: string }[];
+  }
+  const settings: settingsInterface = {
     htmlAttributes: {
       lang: metadata.language,
     },
@@ -210,7 +301,7 @@ export function helmetSettingsFromMetadata(metadata = {}, options = {}) {
       rel: 'canonical',
       href: metadata.canonical,
     },
-  ].filter(({ href } = {}) => !!href);
+  ].filter(({ href }) => !!href);
 
   settings.meta = [
     ...meta,
@@ -282,7 +373,7 @@ export function helmetSettingsFromMetadata(metadata = {}, options = {}) {
       property: 'article:published_time',
       content: metadata.article?.publishedTime,
     },
-  ].filter(({ content } = {}) => !!content);
+  ].filter(({ content }) => !!content);
 
   return settings;
 }

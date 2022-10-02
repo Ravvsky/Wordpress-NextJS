@@ -13,5 +13,5 @@ export function formatDate(date, pattern = 'PPP') {
  */
 
 export function sortObjectsByDate(array, { key = 'date' } = {}) {
-  return array.sort((a, b) => new Date(b[key]) - new Date(a[key]));
+  return array.sort((a, b) => new Date(b[key]).valueOf() - new Date(a[key]).valueOf());
 }

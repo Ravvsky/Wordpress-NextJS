@@ -5,9 +5,25 @@ import { postPathBySlug } from 'lib/posts';
 import { pagePathBySlug } from 'lib/pages';
 
 import config from '../../package.json';
-
-export function ArticleJsonLd({ post = {}, siteTitle = '' }) {
-  const { homepage = '', faviconPath = '/favicon.ico' } = config;
+interface ArticleJsonLdInterface {
+  post?: {
+    title?: string;
+    slug?: string;
+    excerpt?: string;
+    date?: string;
+    author?: {
+      name: string;
+    };
+    categories?: any[];
+    modified?: string;
+    featuredImage?: {
+      sourceUrl: string;
+    };
+  };
+  siteTitle: string;
+}
+export function ArticleJsonLd({ post = {}, siteTitle = '' }: ArticleJsonLdInterface) {
+  const { homepage = '', faviconPath = '/favicon.ico' }: { homepage: string; faviconPath?: string } = config;
   const { title, slug, excerpt, date, author, categories, modified, featuredImage } = post;
   const path = postPathBySlug(slug);
   const datePublished = !!date && new Date(date);
@@ -99,7 +115,16 @@ export function WebpageJsonLd({ title = '', description = '', siteTitle = '', sl
   );
 }
 
-export function AuthorJsonLd({ author = {} }) {
+interface AuthorJsonLdInterface {
+  author: {
+    name?: string;
+    avatar?: {
+      url: string;
+    };
+    description?: string;
+  };
+}
+export function AuthorJsonLd({ author = {} }: AuthorJsonLdInterface) {
   const { homepage = '' } = config;
   const { name, avatar, description } = author;
   const path = authorPathByName(name);
@@ -121,7 +146,7 @@ export function AuthorJsonLd({ author = {} }) {
 }
 
 export function LogoJsonLd() {
-  const { homepage = '', faviconPath = '/favicon.ico' } = config;
+  const { homepage = '', faviconPath = '/favicon.ico' }: { homepage: string; faviconPath?: string } = config;
 
   const jsonLd = {
     '@context': 'https://schema.org',

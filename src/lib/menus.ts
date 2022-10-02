@@ -35,7 +35,7 @@ export async function getAllMenus() {
  * mapMenuData
  */
 
-export function mapMenuData(menu = {}) {
+export function mapMenuData(menu) {
   const { node } = menu;
   const data = { ...node };
 

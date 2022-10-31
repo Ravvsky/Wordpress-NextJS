@@ -51,6 +51,13 @@ export async function getPostBySlug(slug: any) {
 
   if (!postData?.data.post) return { post: undefined };
   interface postInterface {
+    categories?: {
+      databaseId?: number;
+      id?: string;
+      name?: string;
+      slug?: string;
+    };
+    databaseId?: number;
     metaTitle?: string;
     metaDescription?: string;
     readingTime?: number;
@@ -125,7 +132,6 @@ export async function getPostBySlug(slug: any) {
       };
     }
     const { seo }: seoInterface = seoData?.data?.post || {};
-    console.log(seo);
     post.metaTitle = seo.title;
     post.metaDescription = seo.metaDesc;
     post.readingTime = seo.readingTime;
@@ -396,16 +402,16 @@ export function mapPostData(post = {}) {
  */
 
 export async function getRelatedPosts(
-  categories: { databaseId: number; id: string; name: string; slug: string }[],
+  categories: { databaseId?: number; id?: string; name?: string; slug?: string },
   postId: number,
   count: number = 5
-) {
+): Promise<any> {
   if (!Array.isArray(categories) || categories.length === 0) return;
   interface relatedInterface {
     category?: {
-      databaseId: number;
-      id: string;
-      name: string;
+      databaseId?: number;
+      id?: string;
+      name?: string;
       slug: string;
     };
     posts?: { title: string; slug: string };
@@ -484,8 +490,11 @@ export async function getPagesCount(posts: string | any[], postsPerPage: number)
 /**
  * getPaginatedPosts
  */
-
-export async function getPaginatedPosts({ currentPage = 1, ...options } = {}) {
+type getPaginatedPostsProps = {
+  currentPage: number | string;
+  queryIncludes?: string;
+};
+export async function getPaginatedPosts({ currentPage = 1, ...options }: getPaginatedPostsProps) {
   const { posts } = await getAllPosts(options);
   const postsPerPage = await getPostsPerPage();
   const pagesCount = await getPagesCount(posts, postsPerPage);

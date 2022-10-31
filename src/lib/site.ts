@@ -164,9 +164,14 @@ interface metadataInterface {
   og: {
     url?: string;
     type?: string;
+    title?: string;
   };
-  twitter: {};
+  twitter: {
+    title?: string;
+  };
   article?: {};
+  description?: string;
+  title?: string;
 }
 export function constructPageMetadata(
   defaultMetadata: pageMetadataInterface = {},

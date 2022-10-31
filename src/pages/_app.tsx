@@ -1,4 +1,4 @@
-import NextApp from 'next/app';
+import NextApp, { AppContext } from 'next/app';
 
 import { SiteContext, useSiteContext } from 'hooks/use-site';
 import { SearchProvider } from 'hooks/use-search';
@@ -31,7 +31,7 @@ function App({ Component, pageProps = {}, metadata, recentPosts, categories, men
   );
 }
 
-App.getInitialProps = async function (appContext) {
+App.getInitialProps = async function (appContext: AppContext) {
   const appProps = await NextApp.getInitialProps(appContext);
 
   const { posts: recentPosts } = await getRecentPosts({

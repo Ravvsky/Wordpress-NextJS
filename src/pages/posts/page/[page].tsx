@@ -17,7 +17,7 @@ export default function Posts({ posts, pagination }) {
   return <TemplateArchive title={title} posts={posts} slug={slug} pagination={pagination} metadata={metadata} />;
 }
 
-export async function getStaticProps({ params = {} } = {}) {
+export async function getStaticProps({ params = { page: '' } } = {}) {
   const { posts, pagination } = await getPaginatedPosts({
     currentPage: params?.page,
     queryIncludes: 'archive',

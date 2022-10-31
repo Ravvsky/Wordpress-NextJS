@@ -36,9 +36,8 @@ export default function Author({ user, posts }) {
   );
 }
 
-export async function getStaticProps({ params = {} } = {}) {
+export async function getStaticProps({ params = { slug: '' } } = {}) {
   const { user } = await getUserByNameSlug(params?.slug);
-
   if (!user) {
     return {
       props: {},

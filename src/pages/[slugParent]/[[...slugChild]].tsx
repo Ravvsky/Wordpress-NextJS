@@ -17,7 +17,18 @@ import Breadcrumbs from 'components/Breadcrumbs';
 
 import styles from 'styles/pages/Page.module.scss';
 
-export default function Page({ page, breadcrumbs }) {
+export default function Page({
+  page,
+  breadcrumbs,
+}: {
+  page: any;
+  breadcrumbs: {
+    [x: string]: any;
+    id: string;
+    title: string;
+    uri: string;
+  };
+}) {
   const { title, metaTitle, description, slug, content, featuredImage, children } = page;
 
   const { metadata: siteMetadata = {} } = useSite();
@@ -30,7 +41,7 @@ export default function Page({ page, breadcrumbs }) {
     },
   });
 
-  if (process.env.WORDPRESS_PLUGIN_SEO !== true) {
+  if (process.env.WORDPRESS_PLUGIN_SEO !== 'true') {
     metadata.title = `${title} - ${siteMetadata.title}`;
     metadata.og.title = metadata.title;
     metadata.twitter.title = metadata.title;
@@ -103,9 +114,8 @@ export default function Page({ page, breadcrumbs }) {
   );
 }
 
-export async function getStaticProps({ params = {} } = {}) {
+export async function getStaticProps({ params = { slugParent: '', slugChild: [''] } } = {}) {
   const { slugParent, slugChild } = params;
-
   // We can use the URI to look up our page and subsequently its ID, so
   // we can first contruct our URI from the page params
 

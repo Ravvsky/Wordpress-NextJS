@@ -52,7 +52,7 @@ export default function Post({ post, socialImage, related }) {
     },
   });
 
-  if (process.env.WORDPRESS_PLUGIN_SEO !== true) {
+  if (process.env.WORDPRESS_PLUGIN_SEO !== 'true') {
     metadata.title = `${title} - ${siteMetadata.title}`;
     metadata.og.title = metadata.title;
     metadata.twitter.title = metadata.title;
@@ -141,7 +141,7 @@ export default function Post({ post, socialImage, related }) {
   );
 }
 
-export async function getStaticProps({ params = {} } = {}) {
+export async function getStaticProps({ params = { slug: '' } } = {}) {
   const { post } = await getPostBySlug(params?.slug);
 
   if (!post) {
@@ -152,8 +152,18 @@ export async function getStaticProps({ params = {} } = {}) {
   }
 
   const { categories, databaseId: postId } = post;
-
-  const props = {
+  interface propsInterface {
+    post: any;
+    socialImage: string;
+    related?: {
+      posts?: any[];
+      title?: {
+        name?: string | null;
+        link?: string;
+      };
+    };
+  }
+  const props: propsInterface = {
     post,
     socialImage: `${process.env.OG_IMAGE_DIRECTORY}/${params?.slug}.png`,
   };

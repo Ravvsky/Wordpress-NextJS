@@ -61,6 +61,7 @@ export default function Home({ posts, pagination }) {
 
 export async function getStaticProps() {
   const { posts, pagination } = await getPaginatedPosts({
+    currentPage: undefined,
     queryIncludes: 'archive',
   });
   return {

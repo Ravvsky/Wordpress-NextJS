@@ -137,7 +137,14 @@
 "@types/prop-types@*":
   "version" "15.7.5"
 
-"@types/react@^18.0.20":
+"@types/react-helmet@^6.1.5":
+  "integrity" "sha512-/ICuy7OHZxR0YCAZLNg9r7I9aijWUWvxaPR6uTuyxe8tAj5RL4Sw1+R6NhXUtOsarkGYPmaHdBDvuXh2DIN/uA=="
+  "resolved" "https://registry.npmjs.org/@types/react-helmet/-/react-helmet-6.1.5.tgz"
+  "version" "6.1.5"
+  dependencies:
+    "@types/react" "*"
+
+"@types/react@*", "@types/react@^18.0.20":
   "integrity" "sha512-MWul1teSPxujEHVwZl4a5HxQ9vVNsjTchVA+xRqv/VYGCuKGAU6UhfrTdF5aBefwD1BHUD8i/zq+O/vyCm/FrA=="
   "resolved" "https://registry.npmjs.org/@types/react/-/react-18.0.20.tgz"
   "version" "18.0.20"

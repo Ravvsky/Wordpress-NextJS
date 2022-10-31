@@ -15,7 +15,36 @@ import Pagination from 'components/Pagination/Pagination';
 import styles from 'styles/templates/Archive.module.scss';
 
 const DEFAULT_POST_OPTIONS = {};
-
+interface PropsInterface {
+  title?: string;
+  // eslint-disable-next-line no-undef
+  Title?: JSX.Element;
+  posts: {};
+  postOptions?: {
+    excludeMetadata?: string[];
+  };
+  slug: string;
+  metadata: {
+    canonical: string;
+    og: {
+      url?: string;
+      type?: string;
+      title?: string;
+    };
+    twitter: {
+      title?: string;
+    };
+    article?: {};
+    description?: string;
+    title?: string;
+  };
+  pagination?: {
+    currentPage: number;
+    pagesCount: number;
+    basePath: string;
+  };
+}
+//posts metadata
 export default function TemplateArchive({
   title = 'Archive',
   Title,
@@ -24,10 +53,10 @@ export default function TemplateArchive({
   slug,
   metadata,
   pagination,
-}) {
+}: PropsInterface) {
   const { metadata: siteMetadata = {} } = useSite();
 
-  if (process.env.WORDPRESS_PLUGIN_SEO !== true) {
+  if (process.env.WORDPRESS_PLUGIN_SEO !== 'true') {
     metadata.title = `${title} - ${siteMetadata.title}`;
     metadata.og.title = metadata.title;
     metadata.twitter.title = metadata.title;
@@ -74,6 +103,7 @@ export default function TemplateArchive({
                   currentPage={pagination?.currentPage}
                   pagesCount={pagination?.pagesCount}
                   basePath={pagination?.basePath}
+                  addCanonical={false}
                 />
               )}
             </>

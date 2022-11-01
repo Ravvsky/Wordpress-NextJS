@@ -34,7 +34,7 @@ const PostCard = ({
     };
     isSticky: boolean;
   };
-  options: { excludeMetadata?: string[] };
+  options?: { excludeMetadata?: string[] };
 }) => {
   const { title, excerpt, slug, date, author, categories, isSticky = false } = post;
   const { excludeMetadata = [] } = options;

@@ -264,7 +264,7 @@ export function constructPageMetadata(
  * helmetSettingsFromMetadata
  */
 interface helmetSettingsFromMetadataOptions {
-  link?: [];
+  link?: { rel?: string; type?: string; href?: string; sizes?: string }[];
   meta?: [];
   setTitle?: boolean;
 }

@@ -1,5 +1,5 @@
 import ClassName from 'models/classname';
-
+import React from 'react';
 import styles from './Image.module.scss';
 
 const Image = ({
@@ -12,11 +12,19 @@ const Image = ({
   srcSet,
   sizes,
   dangerouslySetInnerHTML,
+}: {
+  children?: React.ReactNode;
+  className?: { base: string[] };
+  width?: string;
+  height?: string;
+  src?: string;
+  alt?: string;
+  srcSet?: string;
+  sizes?: string;
+  dangerouslySetInnerHTML?: string;
 }) => {
   const imageClassName = new ClassName(styles.image);
-
   imageClassName.addIf(className, className);
-
   return (
     <figure className={imageClassName.toString()}>
       <div className={styles.featuredImageImg}>

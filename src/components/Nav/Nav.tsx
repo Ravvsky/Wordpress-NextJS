@@ -16,7 +16,7 @@ const SEARCH_VISIBLE = 'visible';
 const SEARCH_HIDDEN = 'hidden';
 
 const Nav = () => {
-  const formRef = useRef();
+  const formRef = useRef(null);
 
   const [searchVisibility, setSearchVisibility] = useState(SEARCH_HIDDEN);
 
@@ -51,8 +51,9 @@ const Nav = () => {
     // When the search box opens up, additionall find the search input and focus
     // on the element so someone can start typing right away
 
-    const searchInput = Array.from(formRef.current.elements).find((input) => input.type === 'search');
-
+    const searchInput = Array.from(formRef.current.elements).find(
+      (input: HTMLInputElement) => input.type === 'search'
+    ) as HTMLInputElement;
     searchInput.focus();
 
     return () => {
@@ -132,21 +133,26 @@ const Nav = () => {
 
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      if (focusElement.nodeName === 'INPUT' && focusElement.nextSibling.children[0].nodeName !== 'P') {
-        focusElement.nextSibling.children[0].firstChild.firstChild.focus();
+      if (focusElement.nodeName === 'INPUT' && focusElement.nextSibling.firstChild.nodeName !== 'P') {
+        const elementToFocusOn = focusElement.nextSibling.firstChild.firstChild.firstChild as HTMLElement;
+        elementToFocusOn.focus();
       } else if (focusElement.parentElement.nextSibling) {
-        focusElement.parentElement.nextSibling.firstChild.focus();
+        const elementToFocusOn = focusElement.parentElement.nextSibling.firstChild as HTMLElement;
+        elementToFocusOn.focus();
       } else {
-        focusElement.parentElement.parentElement.firstChild.firstChild.focus();
+        const elementToFocusOn = focusElement.parentElement.parentElement.firstChild.firstChild as HTMLElement;
+        elementToFocusOn.focus();
       }
     }
 
     if (e.key === 'ArrowUp') {
       e.preventDefault();
       if (focusElement.nodeName === 'A' && focusElement.parentElement.previousSibling) {
-        focusElement.parentElement.previousSibling.firstChild.focus();
+        const elementToFocusOn = focusElement.parentElement.previousSibling.firstChild as HTMLElement;
+        elementToFocusOn.focus();
       } else {
-        focusElement.parentElement.parentElement.lastChild.firstChild.focus();
+        const elementToFocusOn = focusElement.parentElement.parentElement.lastChild.firstChild as HTMLElement;
+        elementToFocusOn.focus();
       }
     }
   }

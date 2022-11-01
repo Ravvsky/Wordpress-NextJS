@@ -14,7 +14,6 @@ const DEFAULT_METADATA_OPTIONS = {
 
 const Metadata = ({ className, author, date, categories, options = DEFAULT_METADATA_OPTIONS, isSticky = false }) => {
   const metadataClassName = new ClassName(styles.metadata);
-
   metadataClassName.addIf(className, className);
 
   const { compactCategories } = options;
@@ -41,7 +40,7 @@ const Metadata = ({ className, author, date, categories, options = DEFAULT_METAD
       )}
       {date && (
         <li>
-          <time pubdate="pubdate" dateTime={date}>
+          <time itemProp="datePublished" dateTime={date}>
             {formatDate(date)}
           </time>
         </li>

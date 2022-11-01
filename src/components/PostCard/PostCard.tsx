@@ -7,11 +7,75 @@ import Metadata from 'components/Metadata';
 import { FaMapPin } from 'react-icons/fa';
 import styles from './PostCard.module.scss';
 
-const PostCard = ({ post, options = {} }) => {
+const PostCard = ({
+  post,
+  options = {},
+}: {
+  post: {
+    title: string;
+    excerpt: string;
+    slug: string;
+    date: string;
+    author: {
+      avatar: {
+        height: number;
+        url: string;
+        width: number;
+      };
+      id: string;
+      name: string;
+      slug: string;
+    };
+    categories: {
+      databaseId: number;
+      id: string;
+      name: string;
+      slug: string;
+    };
+    isSticky: boolean;
+  };
+  options: { excludeMetadata?: string[] };
+}) => {
   const { title, excerpt, slug, date, author, categories, isSticky = false } = post;
   const { excludeMetadata = [] } = options;
 
-  const metadata = {};
+  const metadata: {
+    author: {
+      avatar: {
+        height: number;
+        url: string;
+        width: number;
+      };
+      id: string;
+      name: string;
+      slug: string;
+    };
+    date: string;
+    categories: {
+      databaseId: number;
+      id: string;
+      name: string;
+      slug: string;
+    };
+  } = {
+    author: {
+      avatar: {
+        height: 0,
+        url: '',
+        width: 0,
+      },
+      id: '',
+      name: '',
+      slug: '',
+    },
+    date: '',
+    categories: {
+      databaseId: 0,
+      id: '',
+      name: '',
+      slug: '',
+    },
+  };
 
   if (!excludeMetadata.includes('author')) {
     metadata.author = author;

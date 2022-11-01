@@ -2,7 +2,18 @@
 // import styles from './NavListItem.module.scss';
 import Link from 'next/link';
 
-const NavListItem = ({ className, item }) => {
+interface itemInterface {
+  cssClasses: any[];
+  id: string;
+  parentId: string;
+  label: string;
+  title?: string;
+  target?: string;
+  path: string;
+  children?: itemInterface[];
+}
+
+const NavListItem = ({ className, item }: { className?: string; item: itemInterface }) => {
   const nestedItems = (item.children || []).map((item) => {
     return <NavListItem key={item.id} item={item} />;
   });

@@ -1,8 +1,16 @@
 import ClassName from 'models/classname';
 
 import styles from './Title.module.scss';
-
-const Title = ({ className, title, thumbnail }) => {
+interface PropsInterface {
+  className?: string;
+  title: string;
+  thumbnail?: {
+    height: number;
+    width: number;
+    url: string;
+  };
+}
+const Title = ({ className, title, thumbnail }: PropsInterface) => {
   const titleClassName = new ClassName(styles.title);
 
   titleClassName.addIf(className, className);

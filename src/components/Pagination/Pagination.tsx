@@ -10,8 +10,13 @@ import styles from './Pagination.module.scss';
 const MAX_NUM_PAGES = 9;
 
 const { homepage = '' } = config;
-
-const Pagination = ({ pagesCount, currentPage, basePath, addCanonical = true }) => {
+interface PropsInterface {
+  pagesCount: number;
+  currentPage: number;
+  basePath: string;
+  addCanonical: boolean;
+}
+const Pagination = ({ pagesCount, currentPage, basePath, addCanonical = true }: PropsInterface) => {
   const path = `${basePath}/page/`;
 
   const hasPreviousPage = pagesCount > 1 && currentPage > 1;

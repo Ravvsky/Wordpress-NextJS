@@ -4,7 +4,18 @@ import ClassName from 'models/classname';
 
 import styles from './Breadcrumbs.module.scss';
 
-const Breadcrumbs = ({ className, breadcrumbs }) => {
+const Breadcrumbs = ({
+  className,
+  breadcrumbs,
+}: {
+  className?: string;
+  breadcrumbs: {
+    [x: string]: any;
+    id: string;
+    title: string;
+    uri: string;
+  };
+}) => {
   const breadcrumbsClassName = new ClassName(styles.breadcrumbs);
 
   breadcrumbsClassName.addIf(className, className);

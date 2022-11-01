@@ -53,7 +53,8 @@ export async function getCategoryBySlug(slug) {
 
   if (!categoryData?.data.category) return { category: undefined };
 
-  interface test {
+  interface categoryInterface {
+    databaseId?: string;
     title?: string;
     description?: string;
     canonical?: string;
@@ -95,7 +96,7 @@ export async function getCategoryBySlug(slug) {
       title: string;
     };
   }
-  const category: test = mapCategoryData(categoryData?.data.category);
+  const category: categoryInterface = mapCategoryData(categoryData?.data.category);
 
   // If the SEO plugin is enabled, look up the data
   // and apply it to the default settings

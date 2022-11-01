@@ -18,8 +18,15 @@ export default function Category({ category, posts }) {
   return <TemplateArchive title={name} Title={<Title title={name} />} posts={posts} slug={slug} metadata={metadata} />;
 }
 
-export async function getStaticProps({ params = {} } = {}) {
+export async function getStaticProps(
+  {
+    params = {
+      slug: '',
+    },
+  }: { params: { slug: string } } = { params: { slug: '' } }
+) {
   const { category } = await getCategoryBySlug(params?.slug);
+  console.log(params);
 
   if (!category) {
     return {

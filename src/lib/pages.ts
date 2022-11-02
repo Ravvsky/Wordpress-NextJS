@@ -42,6 +42,10 @@ export async function getPageByUri(uri) {
   if (!pageData?.data.page) return { page: undefined };
   interface pageInterface {
     metaTitle?: string;
+    blocks?: {
+      attributesJSON: string;
+      name: string;
+    };
     metaDescription?: string;
     readingTime?: number;
     canonical?: string;
@@ -68,7 +72,6 @@ export async function getPageByUri(uri) {
   }
 
   const page = [pageData?.data.page].map(mapPageData)[0] as pageInterface;
-
   // If the SEO plugin is enabled, look up the data
   // and apply it to the default settings
 

@@ -14,6 +14,7 @@ import Section from 'components/Section';
 import Container from 'components/Container';
 import FeaturedImage from 'components/FeaturedImage';
 import Breadcrumbs from 'components/Breadcrumbs';
+import Blocks from 'components/Blocks';
 
 import styles from 'styles/pages/Page.module.scss';
 
@@ -29,7 +30,7 @@ export default function Page({
     uri: string;
   };
 }) {
-  const { title, metaTitle, description, slug, content, featuredImage, children } = page;
+  const { title, metaTitle, description, slug, blocks, featuredImage, children } = page;
 
   const { metadata: siteMetadata = {} } = useSite();
 
@@ -78,12 +79,7 @@ export default function Page({
       <Content>
         <Section>
           <Container>
-            <div
-              className={styles.content}
-              dangerouslySetInnerHTML={{
-                __html: content,
-              }}
-            />
+            <Blocks blocks={blocks} />
           </Container>
         </Section>
 
@@ -129,7 +125,6 @@ export async function getStaticProps({ params = { slugParent: '', slugChild: [''
   }
 
   const { page } = await getPageByUri(pageUri);
-
   if (!page) {
     return {
       props: {},

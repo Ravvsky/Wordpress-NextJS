@@ -99,7 +99,10 @@ export const QUERY_PAGE_BY_URI = gql`
           }
         }
       }
-      content
+      blocks {
+        attributesJSON
+        name
+      }
       featuredImage {
         node {
           altText

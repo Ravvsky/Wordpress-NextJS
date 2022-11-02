@@ -125,7 +125,10 @@ export const QUERY_POST_BY_SLUG = gql`
           }
         }
       }
-      content
+      blocks {
+        attributesJSON
+        name
+      }
       date
       excerpt
       featuredImage {

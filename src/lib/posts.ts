@@ -59,6 +59,10 @@ export async function getPostBySlug(slug: any) {
     };
     databaseId?: number;
     metaTitle?: string;
+    blocks?: {
+      attributesJSON: string;
+      name: string;
+    };
     metaDescription?: string;
     readingTime?: number;
     canonical?: string;

@@ -16,6 +16,7 @@ import Container from 'components/Container';
 import Content from 'components/Content';
 import Metadata from 'components/Metadata';
 import FeaturedImage from 'components/FeaturedImage';
+import Blocks from 'components/Blocks';
 
 import styles from 'styles/pages/Post.module.scss';
 
@@ -24,7 +25,7 @@ export default function Post({ post, socialImage, related }) {
     title,
     metaTitle,
     description,
-    content,
+    blocks,
     date,
     author,
     categories,
@@ -99,12 +100,7 @@ export default function Post({ post, socialImage, related }) {
       <Content>
         <Section>
           <Container>
-            <div
-              className={styles.content}
-              dangerouslySetInnerHTML={{
-                __html: content,
-              }}
-            />
+            <Blocks blocks={blocks} />
           </Container>
         </Section>
       </Content>

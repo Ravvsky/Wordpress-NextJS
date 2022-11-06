@@ -128,6 +128,15 @@ export const QUERY_POST_BY_SLUG = gql`
       blocks {
         attributesJSON
         name
+        innerBlocks {
+          attributesJSON
+          innerBlocks {
+            attributesJSON
+            innerBlocks {
+              attributesJSON
+            }
+          }
+        }
       }
       date
       excerpt

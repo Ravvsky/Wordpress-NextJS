@@ -102,6 +102,15 @@ export const QUERY_PAGE_BY_URI = gql`
       blocks {
         attributesJSON
         name
+        innerBlocks {
+          attributesJSON
+          innerBlocks {
+            attributesJSON
+            innerBlocks {
+              attributesJSON
+            }
+          }
+        }
       }
       featuredImage {
         node {

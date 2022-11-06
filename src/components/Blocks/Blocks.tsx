@@ -1,8 +1,11 @@
 import Block from 'components/Block/Block';
 
-const Blocks = (props: { blocks: { attributesJSON: string; name: string }[] }) => {
+const Blocks = (props: { blocks: { attributesJSON: string; innerBlocks: any[]; name: string }[] }) => {
   const blocks = props.blocks;
-  const blockslist = blocks.map((d, index) => <Block name={d.name} key={index} />);
+
+  const blockslist = blocks.map((d, index) => (
+    <Block name={d.name} attributesJSON={d.attributesJSON} innerBlocks={d.innerBlocks} key={index} />
+  ));
 
   return <>{blockslist}</>;
 };

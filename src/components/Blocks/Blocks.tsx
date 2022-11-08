@@ -4,7 +4,7 @@ const Blocks = (props: { blocks: { attributesJSON: string; innerBlocks: any[]; n
   const blocks = props.blocks;
 
   const blockslist = blocks.map((d, index) => (
-    <Block name={d.name} attributesJSON={d.attributesJSON} innerBlocks={d.innerBlocks} key={index} />
+    <Block name={d['__typename']} attributesJSON={d.attributesJSON} innerBlocks={d.innerBlocks} key={index} />
   ));
 
   return <>{blockslist}</>;

@@ -11,9 +11,10 @@ const Breadcrumbs = ({
   className?: string;
   breadcrumbs: {
     [x: string]: any;
-    id: string;
-    title: string;
-    uri: string;
+    title?: string;
+    uri?: string;
+    text?: string;
+    url?: string;
   };
 }) => {
   const breadcrumbsClassName = new ClassName(styles.breadcrumbs);
@@ -22,13 +23,13 @@ const Breadcrumbs = ({
 
   return (
     <ul className={breadcrumbsClassName.toString()}>
-      {breadcrumbs.map(({ id, title, uri }) => {
+      {breadcrumbs.map(({ title, uri, text, url }, index) => {
         return (
-          <li key={id}>
-            {!uri && title}
-            {uri && (
-              <Link href={uri}>
-                <a>{title}</a>
+          <li key={index}>
+            {!(uri || url) && (title || text)}
+            {(uri || url) && (
+              <Link href={uri || url}>
+                <a>{title || text}</a>
               </Link>
             )}
           </li>

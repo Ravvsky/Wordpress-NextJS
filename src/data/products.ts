@@ -93,6 +93,21 @@ export const QUERY_PRODUCT_BY_SLUG = gql`
             }
           }
         }
+        productCategories {
+          edges {
+            node {
+              name
+              link
+              uri
+            }
+          }
+        }
+        seo {
+          breadcrumbs {
+            text
+            url
+          }
+        }
       }
     }
   }

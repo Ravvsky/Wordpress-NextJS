@@ -12,8 +12,15 @@ body {
   padding: 0;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, sans-serif;
+  position: relative;
 }
 
+html {
+  font-size: 62.5%;
+}
+body {
+  font-size: 1.6rem;
+}
 p {
   line-height: 1.6;
   margin: 1.2em 0;
@@ -21,10 +28,6 @@ p {
 
 ul {
   padding-left: 1.2em;
-}
-
-a {
-  color: $color-primary;
 }
 
 img {
@@ -37,7 +40,7 @@ input {
   &[type="search"],
   &[type="email"] {
     outline-offset: 0;
-    padding: 0.5em 0.8em;
+    padding: 0.5em 0;
   }
 }
 
@@ -57,4 +60,25 @@ figcaption {
   left: -9999px;
   width: 0;
   height: 0;
+}
+
+@layer base {
+  h1 {
+    @apply text-[3.2rem];
+  }
+  h2 {
+    @apply text-[2.4rem];
+  }
+  h3 {
+    @apply text-[1.9rem];
+  }
+  h4 {
+    @apply text-[2.1rem];
+  }
+  h5 {
+    @apply text-[1.3rem];
+  }
+  h6 {
+    @apply text-[1.1rem];
+  }
 }

@@ -3,6 +3,7 @@ import NextApp, { AppContext } from 'next/app';
 import { SiteContext, useSiteContext } from 'hooks/use-site';
 import { SearchProvider } from 'hooks/use-search';
 
+import CartProvider from 'context/CartProvider';
 import { getSiteMetadata } from 'lib/site';
 import { getRecentPosts } from 'lib/posts';
 import { getCategories } from 'lib/categories';
@@ -12,7 +13,6 @@ import { getAllMenus } from 'lib/menus';
 import 'styles/globals.scss';
 import 'styles/wordpress.scss';
 import variables from 'styles/_variables.module.scss';
-
 function App({ Component, pageProps = {}, metadata, recentPosts, categories, menus }) {
   const site = useSiteContext({
     metadata,
@@ -23,10 +23,12 @@ function App({ Component, pageProps = {}, metadata, recentPosts, categories, men
 
   return (
     <SiteContext.Provider value={site}>
-      <SearchProvider>
-        <NextNProgress height={4} color={variables.progressbarColor} />
-        <Component {...pageProps} />
-      </SearchProvider>
+      <CartProvider>
+        <SearchProvider>
+          <NextNProgress height={4} color={variables.progressbarColor} />
+          <Component {...pageProps} />
+        </SearchProvider>
+      </CartProvider>
     </SiteContext.Provider>
   );
 }

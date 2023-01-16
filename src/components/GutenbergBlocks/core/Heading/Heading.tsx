@@ -1,4 +1,4 @@
-import * as DOMPurify from 'dompurify';
+import DOMPurify from 'isomorphic-dompurify';
 import React, { ElementType } from 'react';
 
 import { stylesInterface } from 'types/Styles';

@@ -37,6 +37,7 @@ export default class MyDocument extends Document<any> {
         <body {...this.helmetBodyAttrComponents}>
           <Main />
           <NextScript />
+          <div id="modal-root"></div>
         </body>
       </Html>
     );

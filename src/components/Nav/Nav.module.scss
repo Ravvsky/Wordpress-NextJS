@@ -3,7 +3,7 @@
 .nav {
   width: 100%;
   border-bottom: 1px solid $color-gray-100;
-  padding: 0 1rem;
+  padding: 0 1.6rem;
 }
 
 .navSection {
@@ -67,7 +67,7 @@
 
     @media (min-width: 480px) {
       justify-content: flex-end;
-      margin-right: -1rem;
+      margin-right: -1.6rem;
     }
   }
 
@@ -113,7 +113,7 @@
   padding: 1.5em;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
   border-top: solid 5px $color-primary;
-  margin-right: -1rem;
+  margin-right: -1.6rem;
   z-index: 999;
 
   @media (min-width: 480px) {
@@ -225,7 +225,7 @@
       margin: 0;
 
       a {
-        font-size: 1rem;
+        font-size: 1.6rem;
         padding: 0.3em;
       }
     }

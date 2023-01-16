@@ -29,6 +29,7 @@
     "date-fns": "^2.29.2",
     "dompurify": "^2.4.0",
     "dotenv": "^16.0.1",
+    "formik": "^2.2.9",
     "fuse.js": "^6.6.2",
     "graphql": "^16.6.0",
     "he": "^1.2.0",
@@ -45,7 +46,8 @@
     "react-icons": "^4.4.0",
     "rss": "^1.2.2",
     "sass": "^1.54.4",
-    "style.css": "^1.0.3"
+    "style.css": "^1.0.3",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/dompurify": "^2.3.4",

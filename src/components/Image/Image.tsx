@@ -12,9 +12,11 @@ const Image = ({
   srcSet,
   sizes,
   dangerouslySetInnerHTML,
+  imgTagclassName,
 }: {
   children?: React.ReactNode;
-  className?: { base: string[] };
+  className?: string;
+  imgTagclassName?: string;
   width?: string;
   height?: string;
   src?: string;
@@ -28,7 +30,15 @@ const Image = ({
   return (
     <figure className={imageClassName.toString()}>
       <div className={styles.featuredImageImg}>
-        <img width={width} height={height} src={src} alt={alt || ''} srcSet={srcSet} sizes={sizes} />
+        <img
+          width={width}
+          height={height}
+          src={src}
+          alt={alt || ''}
+          srcSet={srcSet}
+          sizes={sizes}
+          className={imgTagclassName}
+        />
       </div>
       {children && <figcaption>{children}</figcaption>}
       {dangerouslySetInnerHTML && (

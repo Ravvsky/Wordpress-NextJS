@@ -80,9 +80,14 @@ export const QUERY_PRODUCT_BY_SLUG = gql`
       description
       shortDescription
       type
+      databaseId
       ... on SimpleProduct {
-        price
-        regularPrice
+        price(format: FORMATTED)
+        regularPrice(format: FORMATTED)
+        onSale
+        image {
+          srcSet(size: THUMBNAIL)
+        }
         galleryImages {
           edges {
             node {
@@ -96,12 +101,14 @@ export const QUERY_PRODUCT_BY_SLUG = gql`
         productCategories {
           edges {
             node {
+              databaseId
               name
               link
               uri
             }
           }
         }
+        stockStatus
         seo {
           breadcrumbs {
             text
@@ -117,6 +124,50 @@ export const QUERY_PRODUCT_PER_PAGE = gql`
   query ProductPerPage {
     allSettings {
       readingSettingsPostsPerPage
+    }
+  }
+`;
+
+export const QUERY_COUPON = gql`
+  query QueryCoupon($code: ID!) {
+    coupon(id: $code, idType: CODE) {
+      code
+      discountType
+      amount
+      description
+      excludeSaleItems
+      minimumAmount
+      maximumAmount
+      dateExpiry
+      individualUse
+      excludedProducts {
+        edges {
+          node {
+            databaseId
+          }
+        }
+      }
+      excludedProductCategories {
+        edges {
+          node {
+            databaseId
+          }
+        }
+      }
+      products {
+        edges {
+          node {
+            databaseId
+          }
+        }
+      }
+      productCategories {
+        edges {
+          node {
+            databaseId
+          }
+        }
+      }
     }
   }
 `;

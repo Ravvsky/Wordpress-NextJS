@@ -9,7 +9,34 @@ import {
   QUERY_ALL_PRODUCTS,
   QUERY_PRODUCT_BY_SLUG,
   QUERY_PRODUCT_PER_PAGE,
+  QUERY_COUPON,
 } from 'data/products';
+
+/**
+ * getCouponCode
+ */
+
+export async function getCouponCode(code: string) {
+  const apolloClient = getApolloClient();
+  let couponData: {
+    data: {
+      coupon: any;
+    };
+  };
+
+  try {
+    couponData = await apolloClient.query({
+      query: QUERY_COUPON,
+      variables: {
+        code: code,
+      },
+    });
+  } catch (e) {
+    return { error: e.message };
+  }
+  const coupon = couponData.data.coupon;
+  return { coupon };
+}
 
 /**
  * productPathBySlug
@@ -23,7 +50,7 @@ export function postPathBySlug(slug: any) {
  * getProductBySlug
  */
 
-export async function getPostBySlug(slug: any) {
+export async function getProductBySlug(slug: any) {
   const apolloClient = getApolloClient();
   const includeAuthor = false;
   let postData: {
@@ -44,7 +71,7 @@ export async function getPostBySlug(slug: any) {
     console.log(`[products][getPostBySlug] Failed to query post data: ${e.message}`);
     throw e;
   }
-  if (!postData?.data.product) return { post: undefined };
+  if (!postData?.data.product) return { product: undefined };
   interface postInterface {
     categories?: {
       databaseId?: number;
@@ -81,13 +108,13 @@ export async function getPostBySlug(slug: any) {
     robots?: {};
     twitter?: {};
   }
-  const post = [postData?.data.product].map(mapPostData)[0] as postInterface;
+  const product = [postData?.data.product].map(mapPostData)[0] as postInterface;
 
   // If the SEO plugin is enabled, look up the data
   // and apply it to the default settings
 
   return {
-    post,
+    product,
   };
 }
 

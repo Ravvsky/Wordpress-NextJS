@@ -17,6 +17,7 @@ import Breadcrumbs from 'components/Breadcrumbs';
 import Blocks from 'components/Blocks';
 
 import styles from 'styles/pages/Page.module.scss';
+import CartPage from 'pages/cart';
 
 export default function Page({
   page,
@@ -30,9 +31,8 @@ export default function Page({
     uri: string;
   };
 }) {
-  const { title, metaTitle, description, slug, blocks, featuredImage, children } = page;
-
   const { metadata: siteMetadata = {} } = useSite();
+  const { title, metaTitle, description, slug, blocks, featuredImage, children } = page;
 
   const { metadata } = usePageMetadata({
     metadata: {
@@ -41,6 +41,9 @@ export default function Page({
       description: description || page.og?.description || `Read more about ${title}`,
     },
   });
+  if (page.slug === 'koszyk') {
+    return <CartPage />;
+  }
 
   if (process.env.WORDPRESS_PLUGIN_SEO !== 'true') {
     metadata.title = `${title} - ${siteMetadata.title}`;

@@ -153,7 +153,9 @@ const Cart = (props) => {
             <Link href="/checkout">PROCEED TO CHECKOUT</Link>
           </div>
           <div className="bg-blue-400 p-[2rem]  rounded-3xl">
-            <Link href="/cart">VIEW AND EDIT CART</Link>
+            <Link href="/cart" as="/koszyk">
+              VIEW AND EDIT CART
+            </Link>
           </div>
         </div>
       </div>

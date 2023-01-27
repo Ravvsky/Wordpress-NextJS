@@ -35,15 +35,6 @@ img {
   height: auto;
 }
 
-input {
-  &[type="text"],
-  &[type="search"],
-  &[type="email"] {
-    outline-offset: 0;
-    padding: 0.5em 0;
-  }
-}
-
 figcaption {
   color: $color-gray-500;
   font-size: 0.9em;

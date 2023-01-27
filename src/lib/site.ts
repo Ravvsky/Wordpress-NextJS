@@ -9,7 +9,7 @@ import { QUERY_SITE_DATA, QUERY_SEO_DATA } from 'data/site';
  */
 
 export async function getSiteMetadata() {
-  const apolloClient = getApolloClient();
+  const apolloClient = await getApolloClient();
 
   let siteData;
   let seoData;

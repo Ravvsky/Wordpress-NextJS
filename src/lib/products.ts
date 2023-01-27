@@ -17,7 +17,7 @@ import {
  */
 
 export async function getCouponCode(code: string) {
-  const apolloClient = getApolloClient();
+  const apolloClient = await getApolloClient();
   let couponData: {
     data: {
       coupon: any;
@@ -51,7 +51,7 @@ export function postPathBySlug(slug: any) {
  */
 
 export async function getProductBySlug(slug: any) {
-  const apolloClient = getApolloClient();
+  const apolloClient = await getApolloClient();
   const includeAuthor = false;
   let postData: {
     data: {
@@ -130,7 +130,7 @@ const allPostsIncludesTypes = {
 
 export async function getAllPosts(options: { queryIncludes?: string } = {}) {
   const { queryIncludes = 'index' } = options;
-  const apolloClient = getApolloClient();
+  const apolloClient = await getApolloClient();
 
   const data = await apolloClient.query({
     query: allPostsIncludesTypes[queryIncludes],
@@ -319,7 +319,7 @@ export async function getPostsPerPage() {
   }
 
   try {
-    const apolloClient = getApolloClient();
+    const apolloClient = await getApolloClient();
 
     const { data } = await apolloClient.query({
       query: QUERY_PRODUCT_PER_PAGE,

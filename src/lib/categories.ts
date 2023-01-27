@@ -15,7 +15,7 @@ export function categoryPathBySlug(slug) {
  */
 
 export async function getAllCategories() {
-  const apolloClient = getApolloClient();
+  const apolloClient = await getApolloClient();
 
   const data = await apolloClient.query({
     query: QUERY_ALL_CATEGORIES,

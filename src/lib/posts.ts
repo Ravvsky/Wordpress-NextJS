@@ -31,7 +31,7 @@ export function postPathBySlug(slug: any) {
  */
 
 export async function getPostBySlug(slug: any) {
-  const apolloClient = getApolloClient();
+  const apolloClient = await getApolloClient();
   const apiHost = new URL(process.env.WORDPRESS_GRAPHQL_ENDPOINT).host;
 
   let postData: { data: { post: any } };
@@ -196,7 +196,7 @@ const allPostsIncludesTypes = {
 
 export async function getAllPosts(options: { queryIncludes?: string } = {}) {
   const { queryIncludes = 'index' } = options;
-  const apolloClient = getApolloClient();
+  const apolloClient = await getApolloClient();
 
   const data = await apolloClient.query({
     query: allPostsIncludesTypes[queryIncludes],
@@ -222,7 +222,7 @@ const postsByAuthorSlugIncludesTypes = {
 export async function getPostsByAuthorSlug({ slug, ...options }) {
   const { queryIncludes = 'index' } = options;
 
-  const apolloClient = getApolloClient();
+  const apolloClient = await getApolloClient();
 
   let postData: { data: { posts: { edges: { node?: {} }[] } } };
 
@@ -258,7 +258,7 @@ const postsByCategoryIdIncludesTypes = {
 export async function getPostsByCategoryId({ categoryId, ...options }) {
   const { queryIncludes = 'index' } = options;
 
-  const apolloClient = getApolloClient();
+  const apolloClient = await getApolloClient();
 
   let postData: { data: { posts: { edges: { node?: {} }[] } } };
 
@@ -469,7 +469,7 @@ export async function getPostsPerPage() {
   }
 
   try {
-    const apolloClient = getApolloClient();
+    const apolloClient = await getApolloClient();
 
     const { data } = await apolloClient.query({
       query: QUERY_POST_PER_PAGE,

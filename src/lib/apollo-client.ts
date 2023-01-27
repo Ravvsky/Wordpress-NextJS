@@ -1,27 +1,25 @@
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
-
 import { removeLastTrailingSlash } from 'lib/util';
+import { auth } from './orders';
 let client;
 
-/**
- * getApolloClient
- */
-
-export function getApolloClient() {
+export async function getApolloClient(jwtToken?: string) {
   if (!client) {
-    client = _createApolloClient();
+    client = await _createApolloClient(jwtToken);
   }
   return client;
 }
 
-/**
- * createApolloClient
- */
-
-export function _createApolloClient() {
+export async function _createApolloClient(jwtToken?: string) {
+  if (!jwtToken) {
+    jwtToken = await auth();
+  }
   return new ApolloClient({
     link: new HttpLink({
       uri: removeLastTrailingSlash(process.env.WORDPRESS_GRAPHQL_ENDPOINT),
+      headers: {
+        authorization: `Bearer ${jwtToken}`,
+      },
     }),
     cache: new InMemoryCache({
       typePolicies: {

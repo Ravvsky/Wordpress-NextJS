@@ -30,5 +30,7 @@ module.exports = withPlugins([[indexSearch], [feed], [sitemap]], {
     WORDPRESS_GRAPHQL_ENDPOINT: process.env.WORDPRESS_GRAPHQL_ENDPOINT,
     WORDPRESS_MENU_LOCATION_NAVIGATION: process.env.WORDPRESS_MENU_LOCATION_NAVIGATION || 'PRIMARY',
     WORDPRESS_PLUGIN_SEO: process.env.WORDPRESS_PLUGIN_SEO || false,
+    WORDPRESS_LOGIN: 'finklo',
+    WORDPRESS_PASSWORD: 'finklo',
   },
 });

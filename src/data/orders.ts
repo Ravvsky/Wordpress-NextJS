@@ -2,6 +2,9 @@ import { gql } from '@apollo/client';
 
 export const MUTATION_CREATE_CART = gql`
   mutation CreateCart($items: [CartItemInput], $coupons: [String]) {
+    emptyCart(input: {}) {
+      clientMutationId
+    }
     fillCart(input: { coupons: $coupons, items: $items }) {
       clientMutationId
       cart {
@@ -12,6 +15,14 @@ export const MUTATION_CREATE_CART = gql`
           }
         }
       }
+    }
+  }
+`;
+
+export const QUERY_ORDER_TOTAL_AMOUNT = gql`
+  query orderTotalAmount($id: ID) {
+    order(id: $id, idType: ID) {
+      total
     }
   }
 `;
@@ -53,9 +64,10 @@ export const MUTATION_CHECKOUT = gql`
         sessionToken
         jwtAuthToken
       }
-    }
-    emptyCart(input: { clearPersistentCart: true }) {
-      clientMutationId
+      order {
+        id
+        databaseId
+      }
     }
   }
 `;
@@ -67,6 +79,15 @@ export const MUTATION_UPDATE_CUSTOMER = gql`
     }
   }
 `;
+
+export const MUTATION_UPDATE_ORDER = gql`
+  mutation UpdateOrder($orderId: Int, $isPaid: Boolean) {
+    updateOrder(input: { orderId: $orderId, isPaid: $isPaid }) {
+      clientMutationId
+    }
+  }
+`;
+
 export const AUTH = gql`
   mutation Auth($username: String!, $password: String!) {
     login(input: { password: $password, username: $username }) {

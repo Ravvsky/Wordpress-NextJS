@@ -4,7 +4,9 @@ import {
   MUTATION_CHECKOUT,
   MUTATION_CREATE_CART,
   MUTATION_UPDATE_CUSTOMER,
+  MUTATION_UPDATE_ORDER,
   QUERY_AVAILABLE_SHIPPING_METHODS,
+  QUERY_ORDER_TOTAL_AMOUNT,
 } from '../data/orders';
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
 import { removeLastTrailingSlash } from './util';
@@ -58,8 +60,6 @@ export async function createCart(items, coupons) {
     };
   };
 
-  console.log(items);
-
   try {
     cartData = await apolloClient.mutate({
       mutation: MUTATION_CREATE_CART,
@@ -71,14 +71,59 @@ export async function createCart(items, coupons) {
   } catch (e) {
     return { error: e.message };
   }
-  console.log(cartData);
   return { cartData };
+}
+
+export async function orderTotalAmount(orderId) {
+  const apolloClient = await getApolloClient();
+  let cartData: {
+    data: {};
+  };
+
+  try {
+    cartData = await apolloClient.query({
+      query: QUERY_ORDER_TOTAL_AMOUNT,
+      variables: {
+        id: orderId,
+      },
+    });
+  } catch (e) {
+    return { error: e.message };
+  }
+
+  return { cartData };
+}
+
+export async function updateOrder({ orderId, isPaid }) {
+  const apolloClient = await getApolloClient();
+  let orderData = {
+    data: {},
+  };
+  console.log(orderId);
+  try {
+    orderData = await apolloClient.mutate({
+      mutation: MUTATION_UPDATE_ORDER,
+      variables: {
+        orderId: +orderId,
+        isPaid: isPaid,
+      },
+    });
+  } catch (e) {
+    return { error: e.message };
+  }
+  console.log(orderData);
+  return { orderData };
 }
 
 export async function checkoutOrder({ customerNote, billing, shippingMethod, shipToDifferentAddress, shipping }) {
   const apolloClient = await getApolloClient();
   let cartData: {
     data: {
+      checkout?: {
+        order: {
+          id: string;
+        };
+      };
       coupons: any;
       items: any;
       shippingMethods: any;

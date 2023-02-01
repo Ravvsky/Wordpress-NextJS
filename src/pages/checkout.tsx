@@ -91,7 +91,9 @@ const CheckOutPage = () => {
           }
         : {},
     };
-    checkoutOrder(checkoutOrderData);
+    checkoutOrder(checkoutOrderData).then((res) => {
+      router.push(`/payment?order=${res.cart.checkout.order.id}&orderId=${res.cart.checkout.order.databaseId}`);
+    });
   };
 
   return (
@@ -120,7 +122,7 @@ const CheckOutPage = () => {
                       );
                     })}
                     <Button type="button" className={undefined} onClick={checkoutOrderHandler}>
-                      CHECKOUT
+                      Go to payment
                     </Button>
                   </div>
                 )}

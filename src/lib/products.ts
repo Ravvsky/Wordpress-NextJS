@@ -377,3 +377,25 @@ export async function getPaginatedPosts({ currentPage = 1, ...options }: getPagi
     },
   };
 }
+
+export async function getAllProducts({ first, after }) {
+  const apolloClient = await getApolloClient();
+  let cartData;
+  try {
+    cartData = await apolloClient.query({
+      query: QUERY_ALL_PRODUCTS,
+      variables: {
+        first: first,
+        after: after,
+      },
+    });
+  } catch (e) {
+    console.log(e);
+    return { error: e.message };
+  }
+
+  const cart = cartData.data;
+  console.log(cartData);
+
+  return { cart };
+}

@@ -1,6 +1,8 @@
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
+
 import { removeLastTrailingSlash } from 'lib/util';
 import { auth } from './orders';
+import { relayStylePagination } from '@apollo/client/utilities';
 let client;
 
 export async function getApolloClient(jwtToken?: string) {
@@ -25,11 +27,15 @@ export async function _createApolloClient(jwtToken?: string) {
       typePolicies: {
         RootQuery: {
           queryType: true,
+          fields: {
+            products: relayStylePagination(['where']),
+          },
         },
         RootMutation: {
           mutationType: true,
         },
       },
     }),
+    connectToDevTools: true,
   });
 }

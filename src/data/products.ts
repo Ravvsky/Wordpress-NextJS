@@ -61,13 +61,46 @@ export const QUERY_ALL_PRODUCTS_ARCHIVE = gql`
 `;
 
 export const QUERY_ALL_PRODUCTS = gql`
-  query AllProducts {
-    products(first: 10000, where: { visibility: VISIBLE }) {
+  query ($first: Int, $after: String) {
+    products(first: $first, after: $after, where: { supportedTypesOnly: true }) {
       edges {
+        cursor
         node {
           id
           slug
+          ... on ContentNode {
+            uri
+          }
+          name
+          type
+          shortDescription
+          image {
+            id
+            sourceUrl
+            altText
+          }
+          galleryImages {
+            nodes {
+              id
+              sourceUrl
+              altText
+            }
+          }
+          ... on SimpleProduct {
+            onSale
+            price
+            regularPrice
+          }
+          ... on VariableProduct {
+            onSale
+            price
+            regularPrice
+          }
         }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
       }
     }
   }
